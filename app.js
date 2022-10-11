@@ -1,5 +1,7 @@
 import express from "express";
-import router from "./routes/index.js";
+import cors from "cors";
+import path from "path";
+import streaming from "./routes/streaming.js";
 
 /**
  * Emerge Server
@@ -11,13 +13,15 @@ import router from "./routes/index.js";
  */
 
 /* expressJS server initialization */
-const app = express();
 const PORT = process.env.PORT || 42069;
+const app = express();
+app.use(cors());
 
 /* import routes */
-app.use(router);
+app.use(express.static(path.resolve("audio")));
+app.use(streaming);
 
 /* start server */
 app.listen(PORT, () => {
-  console.log(`Emerge Server listening on port ${PORT}`);
+  console.log(`[emerge] - Emerge Server listening on port ${PORT}`);
 });
