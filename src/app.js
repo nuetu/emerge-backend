@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import path from "path";
 import streaming from "./routes/streaming.js";
 
 /**
@@ -17,9 +16,9 @@ const PORT = process.env.PORT || 42069;
 const app = express();
 app.use(cors());
 
-/* import routes */
-app.use(express.static(path.resolve("audio")));
+/* declare routes */
 app.use(streaming);
+app.use(express.static("streams"));
 
 /* start server */
 app.listen(PORT, () => {
