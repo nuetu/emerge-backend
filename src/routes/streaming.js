@@ -2,6 +2,7 @@ import express from "express";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { log } from "../utils.js";
 
 /**
  * Streaming Routes
@@ -18,6 +19,7 @@ const streaming = express.Router();
 /* directory / path name */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const filename = "/routes/streaming.js";
 
 /**
  * GET /
@@ -25,15 +27,22 @@ const __dirname = dirname(__filename);
  * dummy test route
  */
 streaming.get("/streaming/queue", (req, res) => {
+  log(filename, "getting song queue");
+
   /* get song queue */
   fs.readdir(__dirname + "/../../streams/", (error, files) => {
     if (error) {
+      log(filename, "failed getting song queue");
+
       /* something failed, send error */
       res.send({
         status: false,
         message: "obtaining queue failed",
       });
     } else {
+      log(filename, "succeeded getting song queue");
+      log(filename, files);
+
       /* success, send song names */
       res.send({
         status: true,

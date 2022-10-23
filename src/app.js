@@ -28,5 +28,5 @@ app.use(express.static("streams"));
 
 /* start server */
 app.listen(PORT, () => {
-  log(`Emerge Server listening on port ${PORT}`);
+  log("app.js", `Emerge Server listening on port ${PORT}`);
 });

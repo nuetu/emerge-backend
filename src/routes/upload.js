@@ -3,6 +3,7 @@ import multer from "multer";
 import exec from "child_process";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { log } from "../utils.js";
 
 /**
  * Upload Routes
@@ -18,6 +19,7 @@ const streaming = express.Router();
 /* directory / path name */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const filename = "/routes/upload.js";
 
 /* initialize multer for file uploading */
 const storage = multer.diskStorage({
@@ -28,7 +30,6 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   },
 });
-
 const upload = multer({ storage: storage });
 
 /**
@@ -38,8 +39,11 @@ const upload = multer({ storage: storage });
  * convert song to HLS friendly format and store
  */
 streaming.post("/upload/song", upload.single("file"), async (req, res) => {
+  log(filename, "uploading song");
+
   /* check if file exists */
   if (!req.file) {
+    log(filename, "song upload failed");
     res.send({
       status: false,
       message: "no file found",
@@ -51,9 +55,8 @@ streaming.post("/upload/song", upload.single("file"), async (req, res) => {
   exec.exec(
     __dirname + `/../../convert.sh ${req.body.id} ${req.file.filename}`,
     (error, stdout, stderr) => {
-      console.log(stdout);
-
       if (error) {
+        log(filename, "song upload failed");
         console.log(stderr);
         console.log(error);
 
@@ -63,6 +66,8 @@ streaming.post("/upload/song", upload.single("file"), async (req, res) => {
           message: "file upload failed",
         });
       } else {
+        log(filename, `song upload succeeded <${req.file.filename}>`);
+
         /* send success response */
         res.send({
           status: true,
