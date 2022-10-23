@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import streaming from "./routes/streaming.js";
+import upload from "./routes/upload.js";
+import { log } from "./utils.js";
 
 /**
  * Emerge Server
@@ -18,9 +20,10 @@ app.use(cors());
 
 /* declare routes */
 app.use(streaming);
-app.use(express.static("streams"));
+app.use(upload);
+app.use(express.static("public"));
 
 /* start server */
 app.listen(PORT, () => {
-  console.log(`[emerge] - Emerge Server listening on port ${PORT}`);
+  log(`Emerge Server listening on port ${PORT}`);
 });
