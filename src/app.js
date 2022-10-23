@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 /* declare routes */
 app.use(streaming);
 app.use(upload);
-app.use(express.static("public"));
+app.use(express.static("streams"));
 
 /* start server */
 app.listen(PORT, () => {
